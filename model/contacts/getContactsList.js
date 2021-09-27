@@ -1,7 +1,7 @@
 const fs = require('fs/promises')
 const path = require('path')
 
-const contactPath = path.join(__dirname, 'contacts.json')
+const contactPath = path.join('db', 'contacts.json')
 
 const getContactsList = async () => {
   try {

@@ -1,22 +1,25 @@
 const fs = require('fs/promises')
 const path = require('path')
-const { v4: uuidv4 } = require('uuid')
 const getContactsList = require('./getContactsList')
 
-const contactPath = path.join(__dirname, 'contacts.json')
+const contactPath = path.join('db', 'contacts.json')
 
-const addNewContact = async (body) => {
+const deleteContact = async (id) => {
   try {
     const contacts = await getContactsList()
-    const newContact = { id: uuidv4(), ...body }
+    const idx = contacts.findIndex(item => item.id === Number(id))
 
-    contacts.push(newContact)
+    if (idx === -1) {
+      return null
+    }
+
+    contacts.splice(idx, 1)
     await fs.writeFile(contactPath, JSON.stringify(contacts))
 
-    return newContact
+    return true
   } catch (error) {
     console.log(error.message)
   }
 }
 
-module.exports = addNewContact
+module.exports = deleteContact
