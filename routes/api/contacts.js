@@ -1,5 +1,6 @@
 const express = require('express')
 const { getContacts, getById, addContact, removeContact, updateContact, updateStatus } = require('../../controllers/contacts')
+// const autenticate = require('../../middleware/autenticate')
 
 const router = express.Router()
 

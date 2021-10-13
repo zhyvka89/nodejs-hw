@@ -8,6 +8,7 @@ const addContact = async (req, res, next) => {
     if (error) {
       throw new BadRequest(error.message)
     }
+    // const newContact = { ...req.body, owner: req.user._id }
     const result = await addNewContact(req.body)
     res.json({
       status: 'success',
