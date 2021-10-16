@@ -25,11 +25,16 @@ const signin = async(req, res, next) => {
       id: user._id
     }
     const token = jwt.sign(payload, SECRET_KEY)
+    await User.findByIdAndUpdate(user._id, { token })
     res.json({
       status: 'success',
       code: 200,
       data: {
-        token
+        token,
+        user: {
+          email,
+          subscription: user.subscription
+        }
       }
     })
   } catch (error) {
