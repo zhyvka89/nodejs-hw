@@ -1,6 +1,6 @@
 const { BadRequest } = require('http-errors')
-const { addNewContact } = require('../../model/contacts')
-const { joiSchema } = require('../../model/schemas/contactModel')
+
+const { Contact, joiSchema } = require('../../model/schemas/contactModel')
 
 const addContact = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const addContact = async (req, res, next) => {
     if (error) {
       throw new BadRequest(error.message)
     }
-    const result = await addNewContact(req.body)
+    const result = await Contact.create({ ...req.body, owner: req.user._id })
     res.json({
       status: 'success',
       code: 201,

@@ -1,5 +1,5 @@
 const { BadRequest, NotFound } = require('http-errors')
-const { joiSchemaForPatch } = require('../../model/schemas/contactModel')
+const { Contact, joiSchemaForPatch } = require('../../model/schemas/contactModel')
 
 const updateStatus = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const updateStatus = async (req, res, next) => {
       throw new BadRequest(error.message)
     }
     const { id } = req.params
-    const result = updateStatus(id)
+    const result = Contact.findByIdAndUpdate({ _id: id, owner: req.user._id }, req.body, { new: true })
     if (!result) {
       throw new NotFound(`Product with id=${id} not found`)
     }
