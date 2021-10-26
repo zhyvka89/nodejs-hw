@@ -1,5 +1,6 @@
 const { Conflict, BadRequest } = require('http-errors')
 const bcrypt = require('bcrypt')
+const gravatar = require('gravatar')
 const { User, joiSchema } = require('../../model/schemas/userModel')
 
 const singup = async (req, res, next) => {
@@ -14,7 +15,8 @@ const singup = async (req, res, next) => {
       throw new Conflict('Email is already registered')
     }
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-    await User.create({ email, password: hashPassword })
+    const avatarURL = gravatar.url(email)
+    await User.create({ email, avatarURL, password: hashPassword })
     res.json({
       status: 'success',
       code: 201,
