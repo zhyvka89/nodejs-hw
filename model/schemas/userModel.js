@@ -16,18 +16,26 @@ const userSchema = new Schema({
     enum: ['starter', 'pro', 'business'],
     default: 'starter'
   },
+  avatarURL: {
+    type: String,
+    required: true,
+  },
   token: {
     type: String,
     default: null,
   },
-  avatarURL: {
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
     type: String,
-    required: true,
-  }
+    required: [true, 'Verify token is required'],
+  },
 }, { versionKey: false, timestamps: true })
 
 const joiSchema = Joi.object({
-  password: Joi.string().required(),
+  password: Joi.string(),
   email: Joi.string().required(),
   subscription: Joi.string(),
   token: Joi.string()

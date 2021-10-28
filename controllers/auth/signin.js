@@ -14,8 +14,8 @@ const signin = async(req, res, next) => {
     }
     const { email, password } = req.body
     const user = await User.findOne({ email })
-    if (!user) {
-      throw new Unauthorized('Email not found')
+    if (!user || !user.verify) {
+      throw new Unauthorized('Email not found or not verified')
     }
     const isCorrectPassword = bcrypt.compareSync(password, user.password)
     if (!isCorrectPassword) {

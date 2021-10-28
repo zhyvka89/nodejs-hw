@@ -1,7 +1,10 @@
 const { Conflict, BadRequest } = require('http-errors')
 const bcrypt = require('bcrypt')
 const gravatar = require('gravatar')
+const { v4: uuidv4 } = require('uuid')
+
 const { User, joiSchema } = require('../../model/schemas/userModel')
+const { sendEmail } = require('../../helpers')
 
 const singup = async (req, res, next) => {
   try {
@@ -16,7 +19,19 @@ const singup = async (req, res, next) => {
     }
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
     const avatarURL = gravatar.url(email)
-    await User.create({ email, avatarURL, password: hashPassword })
+    const verifyToken = uuidv4()
+    await User.create({
+      email,
+      avatarURL,
+      password: hashPassword,
+      verifyToken
+    })
+    const verificationEmail = {
+      to: email,
+      subject: 'Varification Link',
+      html: `<a href='http://localhost:3000/api/users/verify/${verifyToken}'> Please, verify your email </a>`
+    }
+    sendEmail(verificationEmail)
     res.json({
       status: 'success',
       code: 201,
